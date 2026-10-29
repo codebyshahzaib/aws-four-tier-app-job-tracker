@@ -12,6 +12,8 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 
 from .main import Application, Base, ReportJob, SessionLocal, engine
 
+MAX_ATTEMPTS = 3
+
 
 def process_once() -> bool:
     Base.metadata.create_all(engine)
@@ -26,7 +28,10 @@ def process_once() -> bool:
             job.result = json.dumps({"summary": f"Job search contains {count} applications.", "application_count": count})
             job.state = "completed"
         except Exception as exc:
-            job.state, job.error = "failed", str(exc)
+            session.rollback()
+            job = session.get(ReportJob, job.id)
+            job.state = "failed" if job.attempts >= MAX_ATTEMPTS else "pending"
+            job.error = str(exc)
         job.completed_at = datetime.now(timezone.utc)
         session.commit()
         return True

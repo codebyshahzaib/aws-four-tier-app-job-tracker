@@ -268,6 +268,8 @@ async def upload_document(application_id: str, file: UploadFile = File(...), ses
     content = await file.read()
     if len(content) > 10 * 1024 * 1024:
         raise HTTPException(status_code=422, detail="file must be 10 MB or smaller")
+    if not content.startswith(b"%PDF-"):
+        raise HTTPException(status_code=422, detail="file content is not a valid PDF")
     object_name = f"{uuid.uuid4()}.pdf"
     (UPLOAD_DIR / object_name).write_bytes(content)
     document = Document(application_id=application_id, original_name=file.filename, object_name=object_name, content_type=file.content_type, size=len(content))

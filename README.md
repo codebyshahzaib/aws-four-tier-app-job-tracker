@@ -6,8 +6,9 @@ Trackly is a local-first job search workspace with a React/Vite dashboard and a 
 
 - Application CRUD with search, pagination, sorting, filters, validation, and status badges.
 - Database-backed dashboard statistics and upcoming-interview counts.
-- Private local PDF storage with random object names and authorized download endpoints.
-- Persistent report jobs with asynchronous-style `202` submission and status retrieval.
+- Application details view with private PDF upload, document listing, and download actions.
+- Private local PDF storage with random object names, size/content validation, and download endpoints.
+- Reports page with asynchronous job submission, worker polling, status updates, and generated summaries.
 - Health/readiness endpoints, request IDs, explicit CORS, OpenAPI docs, and Docker Compose.
 
 Authentication, Redis cache wiring, Alembic CLI migrations, and AWS adapters are intentionally documented as next steps rather than claimed as implemented. The current local API has no user identity boundary and should not be exposed publicly.
