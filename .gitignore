@@ -6,3 +6,12 @@ __pycache__/
 *.py[cod]
 backend/uploads/
 backend/job_tracker.db
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/crash.log
+terraform/crash.*.log
+terraform/*.tfvars
+!terraform/*.tfvars.example
