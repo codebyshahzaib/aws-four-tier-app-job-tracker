@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime, timezone
 
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
@@ -80,9 +81,10 @@ def test_filters_sorting_and_pagination():
 
 def test_dashboard_stats_are_database_derived():
     reset_database()
+    current_month_date = datetime.now(timezone.utc).date().isoformat()
     with TestClient(app) as client:
-        create_application(client, status="Offer")
-        create_application(client, status="Rejected", interview_date="2026-12-01")
+        create_application(client, status="Offer", application_date=current_month_date)
+        create_application(client, status="Rejected", application_date=current_month_date, interview_date="2026-12-01")
         data = client.get("/api/v1/dashboard/stats").json()
         assert data["total"] == 2
         assert data["this_month"] == 2
